@@ -25,8 +25,7 @@ public class Problem0001 {
 		
 		/* Standard way of finding the n'th triangle number. */
 		int triangle = n * (n+1) / 2;
-		
-		
+				
 		return x * triangle;
 	}
 }

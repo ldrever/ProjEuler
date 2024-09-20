@@ -42,7 +42,7 @@ Answer =
 Good!
 
 ## Code
-[Problem0001.java]
+[https://github.com/ldrever/ProjEuler/blob/a0b5bea90511776281060aba251f30dc42c157c3/Problem0001.java]
 
 ## Output
 Test answer: 23

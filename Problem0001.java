@@ -19,7 +19,14 @@ public class Problem0001 {
 	 * that are below m.
 	 */
 	static int sumMults(int m, int x) {
+		
+		/* Define the n'th multiple to be the largest multiple of x that is smaller than m. */
 		int n = (m-1) / x;
-		return x * n * (n+1) / 2;
+		
+		/* Standard way of finding the n'th triangle number. */
+		int triangle = n * (n+1) / 2;
+		
+		
+		return x * triangle;
 	}
 }

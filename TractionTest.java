@@ -20,11 +20,13 @@ public class TractionTest {
 		people.remove(0);
 		people.remove(0);
 		people.remove(1);
-		people.add(1, "rohembitz");
+		people.add(1, "RUDY");
 
 		for (String name : people) {
 			out.println(name);
 		}
+		
+		out.println("here endeth the lesson my dude");
 
 		diskScanner.close();
 

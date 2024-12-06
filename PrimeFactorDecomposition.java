@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.lang.Math;
 
-public class PrimeFactorDecomposition {
+import java.lang.Cloneable; 
+
+public class PrimeFactorDecomposition implements Cloneable {
 
 	
 	private HashMap<Long, Integer> primePowers;
-	private long highestPrimeFactor = 1;
+	private long highestPrimeFactor = 1; // FIXME not sync'ed
 	
 	
 	// essential to keep in sync
@@ -17,7 +19,38 @@ public class PrimeFactorDecomposition {
 	private ArrayList<Long> primes;
 	private ArrayList<Integer> powers;
 	
-	
+    // Overriding clone() method 
+    @SuppressWarnings("unchecked")
+	// by simply calling Object class 
+    // clone() method. 
+    @Override
+    protected Object clone() 
+         
+    { 
+    	PrimeFactorDecomposition newcomer;
+    	try {
+    		newcomer = (PrimeFactorDecomposition) super.clone();
+    		newcomer.primePowers = (HashMap<Long, Integer>) this.primePowers.clone();
+    		
+    		newcomer.primes = (ArrayList<Long>) this.primes.clone();
+//    		System.out.println("new primes" + newcomer.primes.toString());
+    		
+    		newcomer.powers = (ArrayList<Integer>) this.powers.clone();
+//    		System.out.println("new powers" + newcomer.powers.toString());
+    		
+    	} catch (CloneNotSupportedException e) {
+//    		System.out.println("except!");
+    		return null;
+    	}
+        return newcomer; 
+    }
+    
+    private void setPower(Long prime, int power) {
+    	int position = this.primes.indexOf(prime);
+    	this.powers.set(position,  power);
+    	this.primePowers.put(prime, power);   	 
+//    	System.out.println("prime " + prime + " now set to " + power + " (position " + position + ")");
+    }
 	
 	private void removeZeroPowers() {
 		
@@ -71,11 +104,57 @@ public class PrimeFactorDecomposition {
 		return output;
 	}
 	
+	public PrimeFactorDecomposition getIncrement(PrimeFactorDecomposition maxes) throws Exception {
+		
+		/*
+		 * remember we're doing ONE increment - so let's systematically search through
+		 * the constituent prime powers until we find one that's not maxed out
+		 */
+		int digitToIncrement = 0;
+		int digitCount = this.primes.size();
+		
+		if (maxes.primes.size() != digitCount) {
+//			System.out.println("testing a: mismatch"); // FIXME ideally we'd test every single prime matches
+			throw new Exception(); 
+		}
+		PrimeFactorDecomposition output = (PrimeFactorDecomposition) this.clone();
+//		System.out.println("testing b: " + output.powers.toString());
+		while(digitToIncrement < digitCount) {
+			long prime = this.primes.get(digitToIncrement);
+			int currentValue = this.powers.get(digitToIncrement);
+			int maxValue = maxes.powers.get(digitToIncrement);
+			
+//			System.out.println("prime " + prime + " is at power " + currentValue + " out of " + maxValue);
+			
+			if(currentValue < maxValue) { // straightforward case where the digit under consideration isn't maxed out
+//				System.out.println("here");
+				output.setPower(prime, 1 + currentValue);
+				break;
+				
+			} else { // that digit's maxed out, so ZERO it, then try and increment the next one instead
+				output.setPower(prime, 0);
+				digitToIncrement++;
+			}
+		}
+		
+		return output;
+	}
+	
+	
+	
 	static boolean isZeroArray(ArrayList<Integer> input) {
 		for(int i = 0; i < input.size(); i++) {
 			if (input.get(i) != 0) {
 				return false;
 			}
+		}
+		return true;
+	}
+	
+	
+	boolean isZeroArray() {
+		for(int i = 0; i < this.primes.size(); i++) {
+			if(this.powers.get(i) != 0) return false;
 		}
 		return true;
 	}
@@ -91,6 +170,14 @@ public class PrimeFactorDecomposition {
 	}
 	
 	
+	
+	public PrimeFactorDecomposition allPowersZero() throws Exception {
+		PrimeFactorDecomposition output = (PrimeFactorDecomposition) this.clone();
+		for(long prime : this.primes) {
+			output.setPower(prime, 0);
+		}
+		return output;
+	}
 	
 	public long getHighestPrimeFactor() {
 //		ArrayList<Long> sorted;

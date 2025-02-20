@@ -509,6 +509,31 @@ public class PrimeFactorDecomposition implements Cloneable {
 		
 	}
 
+	
+	public ArrayList<Long> getOrderedFactorList() throws Exception {
+		ArrayList<Long> results = new ArrayList<Long>();
+		ArrayList<PrimeFactorDecomposition> factorPFDs = this.getFactorPFDs();
+		
+		for (PrimeFactorDecomposition factorPFD : factorPFDs) {
+			results.add(factorPFD.evaluate());
+		}
+		
+		results.sort(null);
+		return results;
+		
+	}
+	
 
+	public ArrayList<PrimeFactorDecomposition> getFactorPFDs() throws Exception {
+		PrimeFactorDecomposition current = this.allPowersZero();		
+		ArrayList<PrimeFactorDecomposition> results = new ArrayList<PrimeFactorDecomposition>();
+		
+		do {
+			results.add(current);
+			current = current.getIncrement(this);
+		} while (!current.isZeroArray());
+		
+		return results;
+	}
 
 }

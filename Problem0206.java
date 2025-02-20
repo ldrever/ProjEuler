@@ -9,7 +9,7 @@ public class Problem0206 {
 
 	public static void main(String args[]) {
 		
-		String targetString = "1_2_3";
+		String targetString = "1_2_3_4";
 		
 		// initial bound based solely on length of string, and first digit:
 		
@@ -33,9 +33,16 @@ public class Problem0206 {
 		
 		for(long testValue = minRoot; testValue <= maxRoot; testValue++) {
 			long result = testValue * testValue;
-			System.out.print("Testing " + testValue + " (squares to ");
-			System.out.print(result + ", which patternizes to ");
-			System.out.println(underscorize("" + result) + ")");
+			
+			String resultString = "" + result;
+			String patternString = underscorize(resultString);
+			
+			if(patternString.equals(targetString)) {
+				System.out.print("Found " + testValue + " (squares to ");
+				System.out.print(result + ", which patternizes to ");
+				System.out.println(underscorize("" + result) + ")");
+				
+			}
 		}
 		
 		

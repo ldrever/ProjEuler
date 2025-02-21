@@ -46,16 +46,45 @@ public class Problem0206 {
 				
 			}
 		}
-		
+		/*
 		HashSet<Long> input = new HashSet<>();
 		input.add(1L);
-		HashSet<Long> output = valuesModTenPower(1, 6, input);
+		HashSet<Long> output = valuesModTenPower(1, 1, input);
 		
 		System.out.println(output.toString());
 		
-		HashSet<Long> output2 = valuesModTenPower(2, 16, output);
+		for(int pos1 = 0; pos1 < 10; pos1++) {
+			
+			HashSet<Long> output1 = valuesModTenPower(2, 10 * pos1 + 1, output);
+			System.out.println("working on " + (10*pos1) + ": ");
+			System.out.println(output1.toString());
+			System.out.println("testiung " + pos1);
+		}
 		
-		System.out.println(output2.toString());
+		*/
+		HashSet<Long> input = new HashSet<>();
+		input.add(1L);
+		
+		HashSet<Long> outputAt5 = valuesModTenPower(1, 5, input);
+		System.out.println("5 mod 10 reached by " + outputAt5.toString());
+		
+		HashSet<Long> hashSet5 = new HashSet<Long>();
+		
+		for (int digit5 = 0; digit5 <= 9; digit5++) {
+			long target = 10 * digit5 + 5;
+			HashSet<Long> outputPre5 = valuesModTenPower(2, target, input);
+			hashSet5.addAll(outputPre5);
+			System.out.println(target + " mod 100 reached by " + outputPre5.toString());
+			
+		}
+		
+		//HashSet<Long> outputAt4 = valuesModTenPower(3, )
+		
+		// FIXME FIRST we need to be capturing the 0-9 underscore choices that ACTUALLY
+		// YIELD STUFF...
+		
+		
+		
 		
 		
 		
@@ -93,8 +122,10 @@ public class Problem0206 {
 	 * ALREADY filtered these based on the MOD 10 requirement. And so on!
 	 */
 	
+	
+	
 	// FIXME bigIntegers of course!
-	public static HashSet<Long> valuesModTenPower(int power, long target, HashSet<Long> valuesModPrevious) {
+	public static HashSet<Long> valuesModTenPower(int tensPower, long target, HashSet<Long> valuesModPrevious) {
 
 		// easy way of avoiding repeated numbers, when they're multiples of more than one of the input
 		// values - COULD be more efficient though FIXME
@@ -102,22 +133,31 @@ public class Problem0206 {
 		
 		HashSet<Long> output = new HashSet<>();
 					
-		long tenPower = (long) Math.pow(10, power);
+		long tenPower = (long) Math.pow(10, tensPower);
 		
-		for(long prevValue : valuesModPrevious) {
-			long testValue = 0;
-			long maxValue = tenPower - 1;
-			while(testValue < maxValue) {
-				
-				if((testValue * testValue) % tenPower == target) {
-					output.add(testValue);
-					System.out.println("detuct that " + testValue + " squares to " + target);
+		if(target == 0) {
+			// suppose that x is nonzero, but x^2 IS zero mod 10^n
+			// well then x^2 must be 2^n * 5^n * K for some K
+			// being square, that n must be even; call it 2m
+			// so FIXME FINISH THIS
+			
+			output.add(0L);
+		} else {
+			
+			for(long prevValue : valuesModPrevious) {
+				long testValue = 0;
+				long maxValue = tenPower - 1;
+				while(testValue < maxValue) {
+					
+					if((testValue * testValue) % tenPower == target) {
+						output.add(testValue);
+						// System.out.println("detuct that " + testValue + " squares to " + target);
+					}
+					
+					testValue += prevValue;
 				}
-				
-				testValue += prevValue;
 			}
 		}
-		
 		return output;
 	}
 }

@@ -86,7 +86,29 @@ public class Problem0206 {
 		
 		
 		
+		ArrayList<Long> digitMinima = new ArrayList<Long>();
+		ArrayList<Long> digitMaxima = new ArrayList<Long>();
 		
+
+		digitMinima.add(1L);
+		digitMinima.add(0L);
+		digitMinima.add(2L);
+		digitMinima.add(0L);
+		digitMinima.add(3L);
+		digitMinima.add(0L);
+		digitMinima.add(4L);
+
+
+
+		digitMaxima.add(1L);
+		digitMaxima.add(9L);
+		digitMaxima.add(2L);
+		digitMaxima.add(9L);
+		digitMaxima.add(3L);
+		digitMaxima.add(9L);
+		digitMaxima.add(4L);
+		
+		System.out.println(getRSPs(digitMinima, digitMaxima));
 		
 	}
 	
@@ -159,5 +181,95 @@ public class Problem0206 {
 			}
 		}
 		return output;
+	}
+	
+	
+	/*
+	 * What we need to do is return a list of root/square pairs.
+	 * 
+	 * Also, let's act more generally, and just say that EVERY digit of the
+	 * target has multiple options - it's just that SOME of them will be
+	 * allowed to vary from 0-9, others only allowed one particular value.
+	 * 
+	 * Example input: [[1,1], [0,9], [2,2], [0,9], [5,5]]
+	 * 
+	 * Example output: [[root1, square1], [root2, square2]]
+	 * 
+	 * The recursive trick will be: in the event it's a single-digit input...
+	 * then return roots and squares directly.
+	 * 
+	 * In other cases: solve for the next smaller one down, then take EACH
+	 * of those possibilities and see what it can achieve for the current
+	 * power.
+	 * 
+	 * To illustrate:
+	 * - single-digit case [5, 5] yields that ONLY 5 MOD 10 squares to 5
+	 * - two-digit case [0, 9], [5, 5] yields all these roots:
+	 *   [65, 35, 5, 85, 55, 25, 75, 45, 15, 95] but ALL for square [25] 
+	 *   
+	 */
+	
+	
+	// FIXME DEDUPE PLS!
+	public static ArrayList<RootSquarePair> getRSPs(ArrayList<Long> digitMinima, ArrayList<Long> digitMaxima) {
+		// FIXME check lengths same, check 0 to 9 only
+		
+		// FIXME we're unexpectedly getting 7-digit results for a 7-digit number...
+		// FIXME comment
+		
+		ArrayList<RootSquarePair> output = new ArrayList<RootSquarePair>();
+		long minDigit = digitMinima.removeFirst();
+		long maxDigit = digitMaxima.removeFirst();			
+		// keep in mind that those are now ALREADY truncated
+		
+		if (digitMinima.size() == 0 && digitMaxima.size() == 0) {
+			
+			for(long root = 0; root <= 9; root++) {
+				long square = root * root;
+				square %= 10;
+				
+				if(square >= minDigit && square <= maxDigit) {
+					output.add(new RootSquarePair(root, 10));
+					System.out.println("here guv");
+				}
+				
+				
+			}
+			
+			return output;
+		} else {
+
+			int power = digitMinima.size();
+			long mod = (long) Math.pow(10, power);
+			
+			ArrayList<RootSquarePair> delegates = getRSPs(digitMinima, digitMaxima);
+			
+			for(RootSquarePair delegate : delegates) {
+				// put EVERYTHING in front of it
+				// see what then fits into the range
+				
+				for(long i = 0; i <= 9; i++) {
+					long toAdd = mod * i;
+					long newRoot = delegate.getRoot() + toAdd;
+					RootSquarePair rsp = new RootSquarePair(newRoot, 10 * mod);
+					
+					int firstDigit = rsp.getSquaresFirstDigit();
+					
+					if(firstDigit >= minDigit && firstDigit <= maxDigit) {
+						output.add(rsp);
+						
+					}
+					
+					
+				}
+				
+				
+			}
+			
+			
+			
+			// main recursion
+			return output;
+		}
 	}
 }

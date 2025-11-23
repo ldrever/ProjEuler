@@ -1,10 +1,8 @@
-package euler;
-
 public class Problem0018_MaximumPathSumI {
 
-	
-	public static void main(String args[]) {		
-		
+
+	public static void main(String args[]) {
+
 		int[][] array = new int[][] {
 			{75},
 			{95,64},
@@ -22,8 +20,8 @@ public class Problem0018_MaximumPathSumI {
 			{63,66,04,68,89,53,67,30,73,16,69,87,40,31},
 			{04,62,98,27,23, 9,70,98,73,93,38,53,60,04,23}
 		};
-		
-		
+
+
 		/*
 
 		int[][] array = new int[][] {
@@ -32,25 +30,25 @@ public class Problem0018_MaximumPathSumI {
 			{2, 4, 6},
 			{8, 5, 9, 3}
 		};
-		
+
 		*/
-		
+
 		//System.out.println(array[2].length);
-		
+
 		/*
 		 * Here's what we do then. Work across the bottom row, and find the largest of every
 		 * pair (note that the number of pairs per row is not HALF the element count - it is
 		 * ONE LESS than it). Then, find the pair's "parent", and increase its value by that.
 		 * Then work upwards and repeat.
 		 */
-		
+
 		for(int i = array.length -1; i > 0; i--) { // > 0 since no comparison occurs with the apex element
 			for(int j = 0; j < i; j++) { // the far-right element doesn't start a pair
 				array[i-1][j] += array[i][j] > array[i][j + 1] ? array[i][j] : array[i][j + 1];
 			}
 		}
-		
+
 		System.out.println("winner: " + array[0][0]);
-		
+
 	}
 }

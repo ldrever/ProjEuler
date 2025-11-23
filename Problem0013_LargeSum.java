@@ -32,8 +32,6 @@ This is really just me familiarizing myself with java.math.BigInteger for the fi
 
 
 
-package euler;
-
 import java.math.BigInteger;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,18 +40,18 @@ import java.util.Scanner;
 public class Problem0013_LargeSum {
 
 	public static void main(String args[]) throws FileNotFoundException {
-		
+
 		Scanner scanner = new Scanner(new File("E:\\workspace_2024-09-20a\\euler\\src\\euler\\0013_largesum.txt"));
-		
+
 		BigInteger total = new BigInteger("0");
-		
+
 		while (scanner.hasNext()) {
 			total = total.add(new BigInteger(scanner.nextLine()));
 		}
-		
+
 		System.out.println("actual total: " + total.toString());
 		System.out.println("digits requested: " + total.toString().substring(0,  10));
-		
+
 		scanner.close();
 
 	}

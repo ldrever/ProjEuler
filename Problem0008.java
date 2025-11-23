@@ -1,23 +1,21 @@
-package euler;
-
 import java.util.ArrayList;
 
 public class Problem0008 {
 /*
  * The four adjacent digits in the 1000-digit number that have the greatest product are 9*9*8*9 = 5832.
- * 
+ *
  * Find the thirteen adjacent digits in the 1000-digit number that have the greatest product. What is the value of this product?
  */
 	static long winner = 0;
 
-	
-	
+
+
 	public static void main(String args[]) {
-		
+
 		final int DIGITCOUNT = 13;
-		
+
 		String str = "";
-		
+
 		str += "73167176531330624919225119674426574742355349194934";
 		str += "96983520312774506326239578318016984801869478851843";
 		str += "85861560789112949495459501737958331952853208805511";
@@ -38,83 +36,83 @@ public class Problem0008 {
 		str += "84580156166097919133875499200524063689912560717606";
 		str += "05886116467109405077541002256983155200055935729725";
 		str += "71636269561882670428252483600823257530420752963450";
-		
+
 		/*
 		 * The first key observation is that the presence of a single
 		 * zero in a group of digits means its product is also zero -
 		 * so we can restrict our attention to zero-free substrings.
-		 * 
+		 *
 		 * So let's convert the one big string into an ArrayList of
 		 * zero-free strings, by using zero as a delimiter...
 		 */
-		
+
 		String array[] = str.split("0");
 		// System.out.println(array[0]);
-		
+
 		/*
 		 * Next, let's convert to ArrayList, and eliminate any array
 		 * members with fewer than DIGITCOUNT digits.
 		 */
-		
+
 		ArrayList<String> blocks = new ArrayList<String>();
-		
+
 		for(int i = 0; i < array.length; i++) {
 			if(array[i].length() >= DIGITCOUNT) {
 				blocks.add(array[i]);
 			}
 		}
-		
-		
+
+
 		/*
 		 * Now, for EACH member of this ArrayList, here's what we do:
-		 * 
+		 *
 		 * - evaluate its first DIGITCOUNT digits and store the result
 		 * - if applicable, divide that result by the FIRST digit and
 		 *   multiply by the DIGITCOUNT+1'th digit, storing again
 		 * - repeat until every DIGITCOUNT-length substring has been
 		 *   processed
-		 *   
+		 *
 		 * Note that we store for the purposes of checking the next
 		 * substring, but we also store a single "best so far" value
 		 * across the entire ArrayList...
 		 */
-		
-		
+
+
 		for(String block : blocks) {
 			// so this is the product of the INITIAL digitcount worth of digits in the block...
 			long current = product(block.substring(0, DIGITCOUNT));
 			capture(current);
 			// System.out.println("block: " + block + "; current: " + current);
-			
+
 			// now proceed to work through the "spare" digits the block has at the right...
-			
+
 			for(int i = DIGITCOUNT; i < block.length(); i++) {
 				current /= digitAt(block, i - DIGITCOUNT);
 				current *= digitAt(block, i);
 				capture(current);
 			}
 		}
-		
+
 		System.out.println("Winner is: " + winner);
 	}
-	
-	
+
+
 	// given a string of digits, calculate the product of those digits
 	private static long product(String str) {
 		long result = 1;
-		
+
 		for(int i = 0; i < str.length(); i++) {
-			result *= digitAt(str,i);			
+			result *= digitAt(str,i);
 		}
-		
+
 		return result;
 	}
-	
+
 	private static int digitAt(String str, int position) {
 		int digit = (int) str.charAt(position);
 		return digit - 48; // ascii
 	}
-	
+
 	private static void capture(long current) {
 		winner = Math.max(winner,  current);
 	}

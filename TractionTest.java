@@ -1,5 +1,3 @@
-package euler;
-
 import static java.lang.System.out;
 import java.util.Scanner;
 import java.io.File;
@@ -25,7 +23,7 @@ public class TractionTest {
 		for (String name : people) {
 			out.println(name);
 		}
-		
+
 		out.println("here endeth the lesson my dude");
 
 		diskScanner.close();

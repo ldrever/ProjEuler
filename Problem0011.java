@@ -1,5 +1,3 @@
-package euler;
-
 import java.util.ArrayList;
 
 public class Problem0011 {
@@ -34,57 +32,57 @@ int[][] array = new int[][] {
 
 	System.out.println(array[0][0]);
 	System.out.println(array[19][1]);
-	
+
 	final int noMarginLimit = array.length - 1;
-		
+
 	final int seqLength = 4;
-	
+
 	final int margin = seqLength - 1;
-	
+
 	final int marginLimit = noMarginLimit - margin;
-	
+
 	int winner = 0;
-	
+
 	// set up directions
-	
+
 	ArrayList<MatrixDirection> directions = new ArrayList<MatrixDirection>();
-	
+
 	directions.add(new MatrixDirection("east",0,noMarginLimit,0,marginLimit,0,1));
 	directions.add(new MatrixDirection("south",0,marginLimit,0,noMarginLimit,1,0));
 	directions.add(new MatrixDirection("southeast",0,marginLimit,0,marginLimit,1,1));
 	directions.add(new MatrixDirection("northeast",margin,noMarginLimit,0,marginLimit,-1,1));
-	
+
 	for(MatrixDirection dir : directions) {
-		
+
 		System.out.println("now working " + dir.name);
-		
+
 		for(int y = dir.top; y <= dir.bot; y++) {
 			System.out.println("row " + y);
 			for(int x = dir.left; x <= dir.right; x++) {
-				
+
 				int[] subArray = new int[seqLength];
 				int product = 1;
-				
+
 				for(int i = 0; i < seqLength; i++) {
 					//System.out.println("desired coordinates: " + (y + i * dir.yIncrement) + ", " + (x + i * dir.xIncrement));
 					subArray[i] = array[y + i * dir.yIncrement][x + i * dir.xIncrement];
 					System.out.print(subArray[i] + " ");
 					product *= subArray[i];
 				}
-				
+
 				System.out.println(" - product " + product);
 				winner = Math.max(winner,  product);
-				
-				
+
+
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	System.out.println("winner: " + winner);
-	
-	
+
+
 }
 
 
